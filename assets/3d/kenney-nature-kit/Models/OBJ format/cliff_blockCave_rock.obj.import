@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bgj13ckn7lgyt"
+path="res://.godot/imported/cliff_blockCave_rock.obj-aab15870e2d23b7a121a32e5624d5cfc.mesh"
+
+[deps]
+
+files=["res://.godot/imported/cliff_blockCave_rock.obj-aab15870e2d23b7a121a32e5624d5cfc.mesh"]
+
+source_file="res://assets/3d/kenney-nature-kit/Models/OBJ format/cliff_blockCave_rock.obj"
+dest_files=["res://.godot/imported/cliff_blockCave_rock.obj-aab15870e2d23b7a121a32e5624d5cfc.mesh", "res://.godot/imported/cliff_blockCave_rock.obj-aab15870e2d23b7a121a32e5624d5cfc.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

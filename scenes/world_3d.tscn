@@ -1,0 +1,71 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/tree_blocks.glb" id="1_tree"]
+[ext_resource type="Script" path="res://scripts/player_3d.gd" id="2_player"]
+
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.25, 0.55, 0.22, 1)
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+material = SubResource("GroundMaterial")
+size = Vector3(40, 0.5, 40)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(40, 0.5, 40)
+
+[sub_resource type="CapsuleMesh" id="PlayerMesh"]
+radius = 0.45
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="PlayerShape"]
+radius = 0.45
+height = 1.8
+
+[node name="World3D" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-55, -35, 0)
+light_energy = 1.2
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9, 0.43, 0, -0.43, 0.9, 0, 12, 18)
+rotation_degrees = Vector3(-25, 0, 0)
+current = false
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("GroundMesh")
+
+[node name="GroundBody" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GroundBody"]
+shape = SubResource("GroundShape")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(0, 1.2, 4)
+script = ExtResource("2_player")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("PlayerMesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("PlayerShape")
+
+[node name="CameraPivot" type="Node3D" parent="Player"]
+position = Vector3(0, 1.4, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraPivot"]
+position = Vector3(0, 5, 9)
+rotation_degrees = Vector3(-25, 0, 0)
+current = true
+
+[node name="TreeA" parent="." instance=ExtResource("1_tree")]
+position = Vector3(-8, 0.25, -6)
+
+[node name="TreeB" parent="." instance=ExtResource("1_tree")]
+position = Vector3(7, 0.25, -5)
+
+[node name="TreeC" parent="." instance=ExtResource("1_tree")]
+position = Vector3(-6, 0.25, 6)
