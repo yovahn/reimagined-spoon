@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/tree_blocks.glb" id="1_tree"]
 [ext_resource type="Script" path="res://scripts/player_3d.gd" id="2_player"]
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/rock_largeA.glb" id="3_rock"]
+[ext_resource type="Script" path="res://scripts/world_3d.gd" id="4_world"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
 albedo_color = Color(0.25, 0.55, 0.22, 1)
@@ -50,6 +51,7 @@ radius = 0.6
 height = 1.5
 
 [node name="World3D" type="Node3D"]
+script = ExtResource("4_world")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-55, -35, 0)
@@ -99,6 +101,24 @@ shape = SubResource("EastWestWallShape")
 [node name="CrystalDestination" type="MeshInstance3D" parent="."]
 position = Vector3(12, 1.0, -9)
 mesh = SubResource("CrystalMesh")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Objective" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 650.0
+offset_bottom = 52.0
+theme_override_font_sizes/font_size = 20
+text = "Objective: find the glowing crystal"
+
+[node name="Prompt" type="Label" parent="HUD"]
+offset_left = 280.0
+offset_top = 470.0
+offset_right = 680.0
+offset_bottom = 510.0
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
 
 [node name="Player" type="CharacterBody3D" parent="."]
 position = Vector3(0, 1.2, 4)
