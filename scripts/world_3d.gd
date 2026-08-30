@@ -15,6 +15,9 @@ const PLAYER_SCENE := preload("res://scenes/player_3d.tscn")
 const SAVE_PATH := "user://forest_world_state.json"
 const TREE_OBSTACLES := ["TreeA", "TreeB", "TreeC", "TreeD", "TreeE", "TreeF", "TreeG", "TreeH", "TreeI", "TreeJ", "TreeK"]
 const ROCK_OBSTACLES := ["RockA", "RockB", "AncientClearing/MonolithA", "AncientClearing/MonolithB", "AncientClearing/MonolithC", "ForestStoneA", "ForestStoneB"]
+const LARGE_WORLD_PROPS := ["Bridge", "BaseCamp/Tent", "BaseCamp/Campfire", "BaseCamp/CampSign", "AncientClearing/MonolithA", "AncientClearing/MonolithB", "AncientClearing/MonolithC", "AncientClearing/ClearingSign", "RockA", "RockB", "RiverCliffA", "RiverCliffB", "RiverCliffC", "RiverCliffD", "ForestStoneA", "ForestStoneB", "FenceNorthA", "FenceNorthB", "FenceNorthC", "FenceSouthA", "FenceSouthB", "FenceSouthC"]
+const PATH_PROPS := ["PathToClearing/Path01", "PathToClearing/Path02", "PathToClearing/Path03", "PathToClearing/Path04", "PathToClearing/Path05", "PathToClearing/Path06"]
+const GROUND_DETAILS := ["GrassA", "GrassB", "GrassC", "GrassD", "GrassE", "FlowerA", "FlowerB", "FlowerC", "MushroomsA", "MushroomsB"]
 var players: Dictionary = {}
 var player: CharacterBody3D
 var crystals_collected := 0
@@ -33,6 +36,7 @@ func _ready() -> void:
 	Network.player_left.connect(_remove_player)
 	Network.session_ended.connect(_on_session_ended)
 	Network.state_requested.connect(_on_state_requested)
+	_scale_environment_assets()
 	_create_landmark_colliders()
 	for crystal in crystals:
 		crystal_base_positions.append(crystal.position)
@@ -128,9 +132,25 @@ func _animate_environment(delta: float) -> void:
 
 func _create_landmark_colliders() -> void:
 	for node_path in TREE_OBSTACLES:
-		_add_landmark_collider(node_path, 1.0, 2.5)
+		_add_landmark_collider(node_path, 1.35, 5.0)
 	for node_path in ROCK_OBSTACLES:
-		_add_landmark_collider(node_path, 0.75, 1.8)
+		_add_landmark_collider(node_path, 1.1, 3.0)
+
+func _scale_environment_assets() -> void:
+	for node_path in TREE_OBSTACLES:
+		_scale_environment_asset(node_path, 5.0)
+	for node_path in LARGE_WORLD_PROPS:
+		_scale_environment_asset(node_path, 3.2)
+	for node_path in PATH_PROPS:
+		_scale_environment_asset(node_path, 2.6)
+	for node_path in GROUND_DETAILS:
+		_scale_environment_asset(node_path, 2.8)
+	$BaseCamp/Campfire/FireLight.position = Vector3(0, 0.55, 0)
+
+func _scale_environment_asset(node_path: NodePath, scale_factor: float) -> void:
+	var asset := get_node_or_null(node_path) as Node3D
+	if is_instance_valid(asset):
+		asset.scale = Vector3.ONE * scale_factor
 
 func _add_landmark_collider(node_path: NodePath, radius: float, height: float) -> void:
 	var landmark := get_node_or_null(node_path) as Node3D
