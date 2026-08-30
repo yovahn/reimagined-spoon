@@ -52,6 +52,18 @@ material = SubResource("CrystalMaterial")
 radius = 0.6
 height = 1.5
 
+[sub_resource type="StandardMaterial3D" id="ShrineMaterial"]
+albedo_color = Color(0.08, 0.35, 0.9, 1)
+emission_enabled = true
+emission = Color(0.1, 0.35, 1, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="CylinderMesh" id="ShrineMesh"]
+material = SubResource("ShrineMaterial")
+top_radius = 0.8
+bottom_radius = 1.2
+height = 1.4
+
 [node name="World3D" type="Node3D"]
 script = ExtResource("4_world")
 
@@ -108,6 +120,15 @@ mesh = SubResource("CrystalMesh")
 light_color = Color(0.6, 0.25, 1, 1)
 light_energy = 3.0
 omni_range = 6.0
+
+[node name="ReturnShrine" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.7, 4)
+mesh = SubResource("ShrineMesh")
+
+[node name="ShrineLight" type="OmniLight3D" parent="ReturnShrine"]
+light_color = Color(0.2, 0.45, 1, 1)
+light_energy = 2.0
+omni_range = 5.0
 
 [node name="Bridge" parent="." instance=ExtResource("6_bridge")]
 position = Vector3(7, 0.25, -3)
