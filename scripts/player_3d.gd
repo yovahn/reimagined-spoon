@@ -3,6 +3,7 @@ extends CharacterBody3D
 @export var speed := 6.0
 @export var sprint_speed := 10.0
 @export var gravity := 18.0
+@export var jump_velocity := 7.0
 @export var mouse_sensitivity := 0.003
 
 @onready var camera_pivot: Node3D = $CameraPivot
@@ -31,5 +32,7 @@ func _physics_process(delta: float) -> void:
 	velocity.x = direction.x * active_speed
 	velocity.z = direction.z * active_speed
 	if not is_on_floor(): velocity.y -= gravity * delta
-	else: velocity.y = -0.1
+	else:
+		velocity.y = -0.1
+		if Input.is_key_pressed(KEY_SPACE): velocity.y = jump_velocity
 	move_and_slide()
