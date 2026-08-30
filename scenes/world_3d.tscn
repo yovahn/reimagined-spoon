@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/rock_largeA.glb" id="3_rock"]
 [ext_resource type="Script" path="res://scripts/world_3d.gd" id="4_world"]
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/fence_simple.glb" id="5_fence"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/bridge_wood.glb" id="6_bridge"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
 albedo_color = Color(0.25, 0.55, 0.22, 1)
@@ -102,6 +103,15 @@ shape = SubResource("EastWestWallShape")
 [node name="CrystalDestination" type="MeshInstance3D" parent="."]
 position = Vector3(12, 1.0, -9)
 mesh = SubResource("CrystalMesh")
+
+[node name="CrystalLight" type="OmniLight3D" parent="CrystalDestination"]
+light_color = Color(0.6, 0.25, 1, 1)
+light_energy = 3.0
+omni_range = 6.0
+
+[node name="Bridge" parent="." instance=ExtResource("6_bridge")]
+position = Vector3(7, 0.25, -3)
+rotation_degrees = Vector3(0, 90, 0)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
