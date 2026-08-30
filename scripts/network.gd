@@ -1,6 +1,6 @@
 extends Node
 
-const DEFAULT_PORT := 7000
+const DEFAULT_PORT := 7001
 const MAX_PLAYERS := 2
 
 signal session_started(initial_players: Array)
@@ -8,6 +8,9 @@ signal session_ended
 signal player_joined(peer_id: int)
 signal player_left(peer_id: int)
 signal status_changed(message: String)
+signal interaction_requested(peer_id: int, position: Vector2)
+signal state_requested(peer_id: int)
+signal world_state_received(state: Dictionary)
 
 var connected_players: Array[int] = []
 var status_text := "Offline — host or join a two-player test."
@@ -76,6 +79,7 @@ func _on_peer_connected(peer_id: int) -> void:
 	connected_players.append(peer_id)
 	announce_player.rpc(peer_id)
 	player_joined.emit(peer_id)
+	state_requested.emit(peer_id)
 	_set_status("Two players connected.")
 
 
@@ -103,3 +107,32 @@ func remove_player(peer_id: int) -> void:
 func _set_status(message: String) -> void:
 	status_text = message
 	status_changed.emit(message)
+
+
+func request_interaction(position: Vector2) -> void:
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+		request_interaction_from_client.rpc_id(1, position)
+	else:
+		interaction_requested.emit(1, position)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func request_interaction_from_client(position: Vector2) -> void:
+	if multiplayer.is_server():
+		interaction_requested.emit(multiplayer.get_remote_sender_id(), position)
+
+
+func broadcast_world_state(state: Dictionary) -> void:
+	if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
+		apply_world_state.rpc(state)
+	world_state_received.emit(state)
+
+
+func send_world_state_to(peer_id: int, state: Dictionary) -> void:
+	if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
+		apply_world_state.rpc_id(peer_id, state)
+
+
+@rpc("authority", "call_remote", "reliable")
+func apply_world_state(state: Dictionary) -> void:
+	world_state_received.emit(state)

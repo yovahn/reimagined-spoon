@@ -21,10 +21,17 @@ Godot game project.
 
 1. Run the project twice.
 2. In the first window, press **Host**. It listens on UDP port `7000`.
-3. In the second window, keep the address as `127.0.0.1`, then press **Join**.
+3. In the second window, keep the address as `127.0.0.1` and use port `7001`, then press **Join**.
 4. Each window should show an orange local player and a blue remote player. Movement should appear in both windows.
 
 For two computers on the same Wi-Fi network, host on one computer and enter the host computer's IPv4 address in the other player's address field. Remote play over the internet requires a later networking setup step such as UDP port forwarding or a virtual LAN.
+
+## Current foundation
+
+- A larger tiled placeholder world with collision and a camera that follows each local player.
+- Host and Guest labels, separate player colors, and a host/join connection panel.
+- Shared interactions: press `E` near the gate to open it or near the crystal to collect it.
+- The host validates these interactions, sends the resulting state to connected players, and saves the shared gate/crystal state locally.
 
 ## Development notes
 
