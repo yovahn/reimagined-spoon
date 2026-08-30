@@ -50,9 +50,13 @@ func join(address: String, port: int = DEFAULT_PORT) -> void:
 
 
 func leave() -> void:
-	if multiplayer.has_multiplayer_peer():
+	var had_peer := multiplayer.has_multiplayer_peer()
+	if had_peer:
 		multiplayer.multiplayer_peer = null
 	connected_players.clear()
+	if had_peer:
+		_set_status("Offline — host or join a two-player session.")
+		session_ended.emit()
 
 
 func _on_connected_to_server() -> void:

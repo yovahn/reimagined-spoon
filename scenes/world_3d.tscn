@@ -359,6 +359,10 @@ text = "Host"
 size_flags_horizontal = 3
 text = "Join"
 
+[node name="Leave" type="Button" parent="NetworkMenu/Panel/VBox/Buttons"]
+size_flags_horizontal = 3
+text = "Leave"
+
 [node name="Status" type="Label" parent="NetworkMenu/Panel/VBox"]
 autowrap_mode = 2
 text = "Offline — host or join a two-player session."

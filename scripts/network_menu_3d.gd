@@ -5,10 +5,12 @@ extends CanvasLayer
 @onready var port: LineEdit = $Panel/VBox/Port
 @onready var host_button: Button = $Panel/VBox/Buttons/Host
 @onready var join_button: Button = $Panel/VBox/Buttons/Join
+@onready var leave_button: Button = $Panel/VBox/Buttons/Leave
 
 func _ready() -> void:
 	host_button.pressed.connect(_host)
 	join_button.pressed.connect(_join)
+	leave_button.pressed.connect(_leave)
 	Network.status_changed.connect(_set_status)
 	_set_status(Network.status_text)
 
@@ -18,6 +20,9 @@ func _host() -> void:
 func _join() -> void:
 	var host_address := address.text.strip_edges()
 	Network.join(host_address if not host_address.is_empty() else "127.0.0.1", _read_port())
+
+func _leave() -> void:
+	Network.leave()
 
 func _read_port() -> int:
 	var value := port.text.to_int()
