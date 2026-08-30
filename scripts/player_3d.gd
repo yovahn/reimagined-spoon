@@ -7,6 +7,7 @@ extends CharacterBody3D
 @export var mouse_sensitivity := 0.003
 
 @onready var camera_pivot: Node3D = $CameraPivot
+@onready var visual: Node3D = $Visual
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -14,7 +15,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	if event is InputEventMouseMotion:
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		camera_pivot.rotate_y(-event.relative.x * mouse_sensitivity)
 		camera_pivot.rotation.x = clamp(camera_pivot.rotation.x - event.relative.y * mouse_sensitivity, deg_to_rad(-55.0), deg_to_rad(-15.0))
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
@@ -30,6 +31,9 @@ func _physics_process(delta: float) -> void:
 	forward.y = 0.0
 	right.y = 0.0
 	var direction := (right.normalized() * input.x - forward.normalized() * input.y).normalized()
+	if direction.length_squared() > 0.001:
+		var target_yaw := atan2(-direction.x, -direction.z)
+		visual.rotation.y = lerp_angle(visual.rotation.y, target_yaw, min(delta * 12.0, 1.0))
 	var active_speed := sprint_speed if Input.is_key_pressed(KEY_SHIFT) else speed
 	velocity.x = direction.x * active_speed
 	velocity.z = direction.z * active_speed

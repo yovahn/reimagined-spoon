@@ -49,6 +49,38 @@ height = 1.8
 radius = 0.45
 height = 1.8
 
+[sub_resource type="StandardMaterial3D" id="AdventurerCoat"]
+albedo_color = Color(0.08, 0.32, 0.42, 1)
+
+[sub_resource type="StandardMaterial3D" id="AdventurerSkin"]
+albedo_color = Color(0.93, 0.66, 0.43, 1)
+
+[sub_resource type="StandardMaterial3D" id="AdventurerHat"]
+albedo_color = Color(0.72, 0.18, 0.14, 1)
+
+[sub_resource type="StandardMaterial3D" id="AdventurerBoots"]
+albedo_color = Color(0.15, 0.11, 0.08, 1)
+
+[sub_resource type="CapsuleMesh" id="AdventurerBodyMesh"]
+material = SubResource("AdventurerCoat")
+radius = 0.34
+height = 1.1
+
+[sub_resource type="SphereMesh" id="AdventurerHeadMesh"]
+material = SubResource("AdventurerSkin")
+radius = 0.32
+height = 0.64
+
+[sub_resource type="CylinderMesh" id="AdventurerHatMesh"]
+material = SubResource("AdventurerHat")
+top_radius = 0.28
+bottom_radius = 0.4
+height = 0.24
+
+[sub_resource type="BoxMesh" id="AdventurerBootMesh"]
+material = SubResource("AdventurerBoots")
+size = Vector3(0.55, 0.5, 0.4)
+
 [sub_resource type="Environment" id="Environment_world"]
 background_mode = 1
 background_color = Color(0.38, 0.63, 0.86, 1)
@@ -287,8 +319,22 @@ horizontal_alignment = 1
 position = Vector3(0, 1.2, 4)
 script = ExtResource("2_player")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
-mesh = SubResource("PlayerMesh")
+[node name="Visual" type="Node3D" parent="Player"]
+
+[node name="Coat" type="MeshInstance3D" parent="Player/Visual"]
+mesh = SubResource("AdventurerBodyMesh")
+
+[node name="Head" type="MeshInstance3D" parent="Player/Visual"]
+position = Vector3(0, 0.72, 0)
+mesh = SubResource("AdventurerHeadMesh")
+
+[node name="Hat" type="MeshInstance3D" parent="Player/Visual"]
+position = Vector3(0, 1.08, 0)
+mesh = SubResource("AdventurerHatMesh")
+
+[node name="Boots" type="MeshInstance3D" parent="Player/Visual"]
+position = Vector3(0, -0.68, 0)
+mesh = SubResource("AdventurerBootMesh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
 shape = SubResource("PlayerShape")
