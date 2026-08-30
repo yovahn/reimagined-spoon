@@ -13,6 +13,8 @@ extends Node3D
 
 const PLAYER_SCENE := preload("res://scenes/player_3d.tscn")
 const SAVE_PATH := "user://forest_world_state.json"
+const TREE_OBSTACLES := ["TreeA", "TreeB", "TreeC", "TreeD", "TreeE", "TreeF", "TreeG", "TreeH", "TreeI", "TreeJ", "TreeK"]
+const ROCK_OBSTACLES := ["RockA", "RockB", "AncientClearing/MonolithA", "AncientClearing/MonolithB", "AncientClearing/MonolithC", "ForestStoneA", "ForestStoneB"]
 var players: Dictionary = {}
 var player: CharacterBody3D
 var crystals_collected := 0
@@ -31,6 +33,7 @@ func _ready() -> void:
 	Network.player_left.connect(_remove_player)
 	Network.session_ended.connect(_on_session_ended)
 	Network.state_requested.connect(_on_state_requested)
+	_create_landmark_colliders()
 	for crystal in crystals:
 		crystal_base_positions.append(crystal.position)
 	_load_world_state()
@@ -122,6 +125,27 @@ func _animate_environment(delta: float) -> void:
 	river.position.y = 0.28 + sin(world_time * 1.4) * 0.025
 	campfire_light.light_energy = 1.55 + sin(world_time * 8.0) * 0.22 + sin(world_time * 13.0) * 0.1
 	sun.light_energy = 1.05 + sin(world_time * 0.08) * 0.15
+
+func _create_landmark_colliders() -> void:
+	for node_path in TREE_OBSTACLES:
+		_add_landmark_collider(node_path, 1.0, 2.5)
+	for node_path in ROCK_OBSTACLES:
+		_add_landmark_collider(node_path, 0.75, 1.8)
+
+func _add_landmark_collider(node_path: NodePath, radius: float, height: float) -> void:
+	var landmark := get_node_or_null(node_path) as Node3D
+	if not is_instance_valid(landmark):
+		return
+	var body := StaticBody3D.new()
+	body.name = "%sCollider" % landmark.name
+	body.position = landmark.position + Vector3(0, height * 0.5 - 0.25, 0)
+	var collision := CollisionShape3D.new()
+	var shape := CylinderShape3D.new()
+	shape.radius = radius
+	shape.height = height
+	collision.shape = shape
+	body.add_child(collision)
+	add_child(body)
 
 func _reset_adventure() -> void:
 	crystals_collected = 0
