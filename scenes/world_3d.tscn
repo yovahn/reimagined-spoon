@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/tree_blocks.glb" id="1_tree"]
 [ext_resource type="Script" path="res://scripts/player_3d.gd" id="2_player"]
@@ -32,6 +32,23 @@ fog_enabled = true
 fog_light_color = Color(0.6, 0.75, 0.82, 1)
 fog_density = 0.008
 
+[sub_resource type="BoxShape3D" id="NorthSouthWallShape"]
+size = Vector3(40, 3, 0.5)
+
+[sub_resource type="BoxShape3D" id="EastWestWallShape"]
+size = Vector3(0.5, 3, 40)
+
+[sub_resource type="StandardMaterial3D" id="CrystalMaterial"]
+albedo_color = Color(0.45, 0.15, 0.9, 1)
+emission_enabled = true
+emission = Color(0.5, 0.1, 1, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="SphereMesh" id="CrystalMesh"]
+material = SubResource("CrystalMaterial")
+radius = 0.6
+height = 1.5
+
 [node name="World3D" type="Node3D"]
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
@@ -54,6 +71,34 @@ mesh = SubResource("GroundMesh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GroundBody"]
 shape = SubResource("GroundShape")
+
+[node name="NorthBoundary" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.5, -20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthBoundary"]
+shape = SubResource("NorthSouthWallShape")
+
+[node name="SouthBoundary" type="StaticBody3D" parent="."]
+position = Vector3(0, 1.5, 20)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SouthBoundary"]
+shape = SubResource("NorthSouthWallShape")
+
+[node name="WestBoundary" type="StaticBody3D" parent="."]
+position = Vector3(-20, 1.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WestBoundary"]
+shape = SubResource("EastWestWallShape")
+
+[node name="EastBoundary" type="StaticBody3D" parent="."]
+position = Vector3(20, 1.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EastBoundary"]
+shape = SubResource("EastWestWallShape")
+
+[node name="CrystalDestination" type="MeshInstance3D" parent="."]
+position = Vector3(12, 1.0, -9)
+mesh = SubResource("CrystalMesh")
 
 [node name="Player" type="CharacterBody3D" parent="."]
 position = Vector3(0, 1.2, 4)
