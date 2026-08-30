@@ -32,6 +32,7 @@ For two computers on the same Wi-Fi network, host on one computer and enter the 
 - A third-person adventurer with camera-relative movement, sprint, jump, and independent camera look.
 - A shared two-player host/join panel in the upper-right. The host relays player movement and validates shared crystal collection and shrine restoration.
 - A repeatable quest: collect three crystals with `E`, return them to the blue shrine, then press `R` to restart.
+- The host/offline game saves this quest state locally and sends it to guests when they join.
 
 ## Development notes
 

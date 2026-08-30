@@ -7,6 +7,7 @@ extends Node3D
 @onready var crystals: Array[MeshInstance3D] = [$CrystalDestination, $CrystalShardForest, $CrystalShardMeadow]
 
 const PLAYER_SCENE := preload("res://scenes/player_3d.tscn")
+const SAVE_PATH := "user://forest_world_state.json"
 var players: Dictionary = {}
 var player: CharacterBody3D
 var crystals_collected := 0
@@ -22,6 +23,7 @@ func _ready() -> void:
 	Network.player_left.connect(_remove_player)
 	Network.session_ended.connect(_on_session_ended)
 	Network.state_requested.connect(_on_state_requested)
+	_load_world_state()
 	_spawn_player(1)
 	for argument in OS.get_cmdline_user_args():
 		if argument == "--network-test-host": test_mode = "host"
@@ -130,6 +132,7 @@ func _collected_indices() -> Array[int]:
 	return collected
 
 func _broadcast_world_state() -> void:
+	_persist_world_state()
 	if multiplayer.has_multiplayer_peer() and multiplayer.is_server():
 		sync_world_state.rpc(_collected_indices(), adventure_complete)
 
@@ -160,11 +163,31 @@ func request_reset() -> void:
 
 @rpc("authority", "call_remote", "reliable")
 func sync_world_state(collected: Array[int], complete: bool) -> void:
+	_apply_world_state(collected, complete)
+
+func _apply_world_state(collected: Array[int], complete: bool) -> void:
 	crystals_collected = collected.size()
 	adventure_complete = complete
 	for index in crystals.size():
 		crystals[index].visible = not collected.has(index)
 	objective.text = "You restored the shrine" if complete else "Forest crystals: %d/%d" % [crystals_collected, crystals.size()]
+
+func _persist_world_state() -> void:
+	if multiplayer.has_multiplayer_peer() and not multiplayer.is_server():
+		return
+	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	file.store_string(JSON.stringify({"collected": _collected_indices(), "complete": adventure_complete}))
+
+func _load_world_state() -> void:
+	if not FileAccess.file_exists(SAVE_PATH):
+		return
+	var parsed = JSON.parse_string(FileAccess.get_file_as_string(SAVE_PATH))
+	if not parsed is Dictionary:
+		return
+	var collected: Array[int] = []
+	for index in parsed.get("collected", []):
+		collected.append(int(index))
+	_apply_world_state(collected, bool(parsed.get("complete", false)))
 
 func _on_session_started(initial_players: Array) -> void:
 	_clear_players()
