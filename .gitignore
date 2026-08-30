@@ -1,5 +1,6 @@
 # Godot editor cache and imported files
 .godot/
+artifacts/screenshots/
 
 # Mono / C# build output, if the project later adopts .NET
 .mono/

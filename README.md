@@ -42,6 +42,16 @@ For two computers on the same Wi-Fi network, host on one computer and enter the 
 - Before making changes, run `git pull`.
 - After testing your work, use `git status`, `git add`, `git commit`, and `git push` to share it.
 
+## Visual validation
+
+Run this from the project folder to launch the real 3D scene briefly and capture its game window:
+
+```powershell
+.\tools\capture-world.ps1
+```
+
+It writes `artifacts/screenshots/world-preview.png`, which is intentionally ignored by Git. Use it after visual changes to check scale, framing, UI, and landmark placement before pushing.
+
 Important project files:
 
 - `project.godot`: Godot project settings and startup scene.
