@@ -5,3 +5,6 @@
 .mono/
 data_*/
 mono_crash.*.json
+
+# Local automated multiplayer test logs
+work-network-test*/

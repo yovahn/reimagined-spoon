@@ -17,6 +17,15 @@ Godot game project.
 
 5. Press **F6** or the play button to run the starter world. Move the placeholder character with **WASD** or the arrow keys.
 
+## Local two-player test
+
+1. Run the project twice.
+2. In the first window, press **Host**. It listens on UDP port `7000`.
+3. In the second window, keep the address as `127.0.0.1`, then press **Join**.
+4. Each window should show an orange local player and a blue remote player. Movement should appear in both windows.
+
+For two computers on the same Wi-Fi network, host on one computer and enter the host computer's IPv4 address in the other player's address field. Remote play over the internet requires a later networking setup step such as UDP port forwarding or a virtual LAN.
+
 ## Development notes
 
 - Engine: Godot 4.7.2 (Standard)
