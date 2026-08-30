@@ -302,6 +302,14 @@ theme_override_colors/font_color = Color(0.95, 0.85, 0.45, 1)
 theme_override_font_sizes/font_size = 16
 text = "Base Camp"
 
+[node name="Target" type="Label" parent="HUD"]
+offset_left = 24.0
+offset_top = 104.0
+offset_right = 480.0
+offset_bottom = 130.0
+theme_override_colors/font_color = Color(0.8, 0.9, 1, 1)
+text = "Nearest crystal: Ancient Clearing"
+
 [node name="Controls" type="Label" parent="HUD"]
 offset_left = 24.0
 offset_top = 48.0

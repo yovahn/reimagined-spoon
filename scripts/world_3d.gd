@@ -4,6 +4,7 @@ extends Node3D
 @onready var prompt: Label = $HUD/Prompt
 @onready var objective: Label = $HUD/Objective
 @onready var location_label: Label = $HUD/Location
+@onready var target_label: Label = $HUD/Target
 @onready var crystals: Array[MeshInstance3D] = [$CrystalDestination, $CrystalShardForest, $CrystalShardMeadow]
 @onready var sun: DirectionalLight3D = $Sun
 @onready var river: MeshInstance3D = $WhisperingRiver
@@ -21,6 +22,7 @@ var test_move_sent := false
 var test_packet_received := false
 var world_time := 0.0
 var crystal_base_positions: Array[Vector3] = []
+var crystal_locations := ["Ancient Clearing", "Shadowwood Grove", "Sunlit Meadow"]
 
 func _ready() -> void:
 	Network.session_started.connect(_on_session_started)
@@ -42,6 +44,7 @@ func _process(delta: float) -> void:
 	_animate_environment(delta)
 	if not is_instance_valid(player):
 		return
+	_update_target_label()
 	if test_mode == "client" and not test_move_sent and multiplayer.has_multiplayer_peer() and multiplayer.get_unique_id() > 1:
 		player.global_position += Vector3(2, 0, 0)
 		submit_player_state.rpc_id(1, player.global_position, 0.0)
@@ -89,6 +92,25 @@ func _update_location_label() -> void:
 		location_label.text = "Whispering River"
 	else:
 		location_label.text = "Wildflower Meadow"
+
+func _update_target_label() -> void:
+	if adventure_complete:
+		target_label.text = "Quest complete — press R to replay"
+		return
+	if crystals_collected == crystals.size():
+		var shrine_distance := roundi(player.global_position.distance_to(shrine.global_position))
+		target_label.text = "Return to Blue Shrine • %dm" % shrine_distance
+		return
+	var nearest_index := -1
+	var nearest_distance := INF
+	for index in crystals.size():
+		if crystals[index].visible:
+			var distance := player.global_position.distance_to(crystals[index].global_position)
+			if distance < nearest_distance:
+				nearest_index = index
+				nearest_distance = distance
+	if nearest_index >= 0:
+		target_label.text = "Nearest crystal: %s • %dm" % [crystal_locations[nearest_index], roundi(nearest_distance)]
 
 func _animate_environment(delta: float) -> void:
 	world_time += delta
