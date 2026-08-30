@@ -9,6 +9,7 @@ extends Node3D
 @onready var sun: DirectionalLight3D = $Sun
 @onready var river: MeshInstance3D = $WhisperingRiver
 @onready var campfire_light: OmniLight3D = $BaseCamp/Campfire/FireLight
+@onready var shrine_light: OmniLight3D = $ReturnShrine/ShrineLight
 
 const PLAYER_SCENE := preload("res://scenes/player_3d.tscn")
 const SAVE_PATH := "user://forest_world_state.json"
@@ -156,6 +157,7 @@ func _apply_collect(index: int) -> void:
 	if index < 0 or index >= crystals.size() or not crystals[index].visible:
 		return
 	crystals[index].visible = false
+	crystals[index].get_node("CrystalLight").visible = false
 	crystals_collected += 1
 	prompt.text = "Crystal collected!"
 	objective.text = "Forest crystals: %d/%d" % [crystals_collected, crystals.size()]
@@ -210,6 +212,9 @@ func _apply_world_state(collected: Array[int], complete: bool) -> void:
 	adventure_complete = complete
 	for index in crystals.size():
 		crystals[index].visible = not collected.has(index)
+		crystals[index].get_node("CrystalLight").visible = not collected.has(index)
+	shrine_light.light_color = Color(0.35, 1.0, 0.62, 1) if complete else Color(0.2, 0.45, 1, 1)
+	shrine_light.light_energy = 3.4 if complete else 2.0
 	objective.text = "You restored the shrine" if complete else "Forest crystals: %d/%d" % [crystals_collected, crystals.size()]
 
 func _persist_world_state() -> void:
