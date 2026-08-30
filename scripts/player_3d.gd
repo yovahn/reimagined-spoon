@@ -13,5 +13,4 @@ func _physics_process(delta: float) -> void:
 	velocity.z = direction.z * speed
 	if not is_on_floor(): velocity.y -= gravity * delta
 	else: velocity.y = -0.1
-	if direction.length() > 0.0: look_at(global_position - direction, Vector3.UP)
 	move_and_slide()
