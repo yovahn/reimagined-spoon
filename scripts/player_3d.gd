@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 @export var speed := 6.0
+@export var sprint_speed := 10.0
 @export var gravity := 18.0
 @export var mouse_sensitivity := 0.003
 
@@ -26,8 +27,9 @@ func _physics_process(delta: float) -> void:
 	forward.y = 0.0
 	right.y = 0.0
 	var direction := (right.normalized() * input.x - forward.normalized() * input.y).normalized()
-	velocity.x = direction.x * speed
-	velocity.z = direction.z * speed
+	var active_speed := sprint_speed if Input.is_key_pressed(KEY_SHIFT) else speed
+	velocity.x = direction.x * active_speed
+	velocity.z = direction.z * active_speed
 	if not is_on_floor(): velocity.y -= gravity * delta
 	else: velocity.y = -0.1
 	move_and_slide()
