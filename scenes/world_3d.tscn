@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/player_3d.gd" id="2_player"]
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/rock_largeA.glb" id="3_rock"]
 [ext_resource type="Script" path="res://scripts/world_3d.gd" id="4_world"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/fence_simple.glb" id="5_fence"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
 albedo_color = Color(0.25, 0.55, 0.22, 1)
@@ -172,3 +173,24 @@ position = Vector3(5, 0.25, 3)
 [node name="RockB" parent="." instance=ExtResource("3_rock")]
 position = Vector3(-3, 0.25, -3)
 rotation_degrees = Vector3(0, 75, 0)
+
+[node name="FenceNorthA" parent="." instance=ExtResource("5_fence")]
+position = Vector3(-10, 0.25, -19)
+
+[node name="FenceNorthB" parent="." instance=ExtResource("5_fence")]
+position = Vector3(0, 0.25, -19)
+
+[node name="FenceNorthC" parent="." instance=ExtResource("5_fence")]
+position = Vector3(10, 0.25, -19)
+
+[node name="FenceSouthA" parent="." instance=ExtResource("5_fence")]
+position = Vector3(-10, 0.25, 19)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="FenceSouthB" parent="." instance=ExtResource("5_fence")]
+position = Vector3(0, 0.25, 19)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="FenceSouthC" parent="." instance=ExtResource("5_fence")]
+position = Vector3(10, 0.25, 19)
+rotation_degrees = Vector3(0, 180, 0)
