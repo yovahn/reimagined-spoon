@@ -5,6 +5,9 @@ extends Node3D
 @onready var objective: Label = $HUD/Objective
 @onready var location_label: Label = $HUD/Location
 @onready var crystals: Array[MeshInstance3D] = [$CrystalDestination, $CrystalShardForest, $CrystalShardMeadow]
+@onready var sun: DirectionalLight3D = $Sun
+@onready var river: MeshInstance3D = $WhisperingRiver
+@onready var campfire_light: OmniLight3D = $BaseCamp/Campfire/FireLight
 
 const PLAYER_SCENE := preload("res://scenes/player_3d.tscn")
 const SAVE_PATH := "user://forest_world_state.json"
@@ -16,6 +19,8 @@ var interact_released := true
 var test_mode := ""
 var test_move_sent := false
 var test_packet_received := false
+var world_time := 0.0
+var crystal_base_positions: Array[Vector3] = []
 
 func _ready() -> void:
 	Network.session_started.connect(_on_session_started)
@@ -23,6 +28,8 @@ func _ready() -> void:
 	Network.player_left.connect(_remove_player)
 	Network.session_ended.connect(_on_session_ended)
 	Network.state_requested.connect(_on_state_requested)
+	for crystal in crystals:
+		crystal_base_positions.append(crystal.position)
 	_load_world_state()
 	_spawn_player(1)
 	for argument in OS.get_cmdline_user_args():
@@ -31,7 +38,8 @@ func _ready() -> void:
 	if not test_mode.is_empty():
 		call_deferred("_start_network_test")
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_animate_environment(delta)
 	if not is_instance_valid(player):
 		return
 	if test_mode == "client" and not test_move_sent and multiplayer.has_multiplayer_peer() and multiplayer.get_unique_id() > 1:
@@ -81,6 +89,16 @@ func _update_location_label() -> void:
 		location_label.text = "Whispering River"
 	else:
 		location_label.text = "Wildflower Meadow"
+
+func _animate_environment(delta: float) -> void:
+	world_time += delta
+	for index in crystals.size():
+		var crystal := crystals[index]
+		crystal.position = crystal_base_positions[index] + Vector3(0, sin(world_time * 2.0 + index) * 0.16, 0)
+		crystal.rotate_y(delta * 1.5)
+	river.position.y = 0.28 + sin(world_time * 1.4) * 0.025
+	campfire_light.light_energy = 1.55 + sin(world_time * 8.0) * 0.22 + sin(world_time * 13.0) * 0.1
+	sun.light_energy = 1.05 + sin(world_time * 0.08) * 0.15
 
 func _reset_adventure() -> void:
 	crystals_collected = 0
