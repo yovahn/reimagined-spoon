@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/mushroom_redGroup.glb" id="13_mushroom"]
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/stone_tallA.glb" id="14_stone"]
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/cliff_block_rock.glb" id="15_cliff"]
+[ext_resource type="PackedScene" path="res://scenes/player_3d.tscn" id="16_player_scene"]
+[ext_resource type="Script" path="res://scripts/network_menu_3d.gd" id="17_network_menu"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
 albedo_color = Color(0.25, 0.55, 0.22, 1)
@@ -315,37 +317,45 @@ offset_bottom = 510.0
 theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 
-[node name="Player" type="CharacterBody3D" parent="."]
-position = Vector3(0, 1.2, 4)
-script = ExtResource("2_player")
+[node name="NetworkMenu" type="CanvasLayer" parent="."]
+script = ExtResource("17_network_menu")
 
-[node name="Visual" type="Node3D" parent="Player"]
+[node name="Panel" type="PanelContainer" parent="NetworkMenu"]
+offset_left = 670.0
+offset_top = 18.0
+offset_right = 940.0
+offset_bottom = 190.0
 
-[node name="Coat" type="MeshInstance3D" parent="Player/Visual"]
-mesh = SubResource("AdventurerBodyMesh")
+[node name="VBox" type="VBoxContainer" parent="NetworkMenu/Panel"]
+theme_override_constants/separation = 6
 
-[node name="Head" type="MeshInstance3D" parent="Player/Visual"]
-position = Vector3(0, 0.72, 0)
-mesh = SubResource("AdventurerHeadMesh")
+[node name="Title" type="Label" parent="NetworkMenu/Panel/VBox"]
+text = "Two-player session"
+theme_override_font_sizes/font_size = 18
 
-[node name="Hat" type="MeshInstance3D" parent="Player/Visual"]
-position = Vector3(0, 1.08, 0)
-mesh = SubResource("AdventurerHatMesh")
+[node name="Address" type="LineEdit" parent="NetworkMenu/Panel/VBox"]
+placeholder_text = "Host address"
+text = "127.0.0.1"
 
-[node name="Boots" type="MeshInstance3D" parent="Player/Visual"]
-position = Vector3(0, -0.68, 0)
-mesh = SubResource("AdventurerBootMesh")
+[node name="Port" type="LineEdit" parent="NetworkMenu/Panel/VBox"]
+placeholder_text = "Port"
+text = "7001"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
-shape = SubResource("PlayerShape")
+[node name="Buttons" type="HBoxContainer" parent="NetworkMenu/Panel/VBox"]
 
-[node name="CameraPivot" type="Node3D" parent="Player"]
-position = Vector3(0, 1.4, 0)
+[node name="Host" type="Button" parent="NetworkMenu/Panel/VBox/Buttons"]
+size_flags_horizontal = 3
+text = "Host"
 
-[node name="Camera3D" type="Camera3D" parent="Player/CameraPivot"]
-position = Vector3(0, 5, 9)
-rotation_degrees = Vector3(-25, 0, 0)
-current = true
+[node name="Join" type="Button" parent="NetworkMenu/Panel/VBox/Buttons"]
+size_flags_horizontal = 3
+text = "Join"
+
+[node name="Status" type="Label" parent="NetworkMenu/Panel/VBox"]
+autowrap_mode = 2
+text = "Offline — host or join a two-player session."
+
+[node name="Players" type="Node3D" parent="."]
 
 [node name="TreeA" parent="." instance=ExtResource("1_tree")]
 position = Vector3(-8, 0.25, -6)
