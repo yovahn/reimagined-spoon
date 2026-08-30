@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/tree_blocks.glb" id="1_tree"]
 [ext_resource type="Script" path="res://scripts/player_3d.gd" id="2_player"]
@@ -6,16 +6,24 @@
 [ext_resource type="Script" path="res://scripts/world_3d.gd" id="4_world"]
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/fence_simple.glb" id="5_fence"]
 [ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/bridge_wood.glb" id="6_bridge"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/tent_detailedOpen.glb" id="7_tent"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/campfire_stones.glb" id="8_fire"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/sign.glb" id="9_sign"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/path_stone.glb" id="10_path"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/grass_large.glb" id="11_grass"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/flower_yellowA.glb" id="12_flower"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/mushroom_redGroup.glb" id="13_mushroom"]
+[ext_resource type="PackedScene" path="res://assets/3d/kenney-nature-kit/Models/GLTF format/stone_tallA.glb" id="14_stone"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
 albedo_color = Color(0.25, 0.55, 0.22, 1)
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 material = SubResource("GroundMaterial")
-size = Vector3(40, 0.5, 40)
+size = Vector3(64, 0.5, 64)
 
 [sub_resource type="BoxShape3D" id="GroundShape"]
-size = Vector3(40, 0.5, 40)
+size = Vector3(64, 0.5, 64)
 
 [sub_resource type="CapsuleMesh" id="PlayerMesh"]
 radius = 0.45
@@ -36,10 +44,10 @@ fog_light_color = Color(0.6, 0.75, 0.82, 1)
 fog_density = 0.008
 
 [sub_resource type="BoxShape3D" id="NorthSouthWallShape"]
-size = Vector3(40, 3, 0.5)
+size = Vector3(64, 3, 0.5)
 
 [sub_resource type="BoxShape3D" id="EastWestWallShape"]
-size = Vector3(0.5, 3, 40)
+size = Vector3(0.5, 3, 64)
 
 [sub_resource type="StandardMaterial3D" id="CrystalMaterial"]
 albedo_color = Color(0.45, 0.15, 0.9, 1)
@@ -89,31 +97,31 @@ mesh = SubResource("GroundMesh")
 shape = SubResource("GroundShape")
 
 [node name="NorthBoundary" type="StaticBody3D" parent="."]
-position = Vector3(0, 1.5, -20)
+position = Vector3(0, 1.5, -32)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NorthBoundary"]
 shape = SubResource("NorthSouthWallShape")
 
 [node name="SouthBoundary" type="StaticBody3D" parent="."]
-position = Vector3(0, 1.5, 20)
+position = Vector3(0, 1.5, 32)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SouthBoundary"]
 shape = SubResource("NorthSouthWallShape")
 
 [node name="WestBoundary" type="StaticBody3D" parent="."]
-position = Vector3(-20, 1.5, 0)
+position = Vector3(-32, 1.5, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WestBoundary"]
 shape = SubResource("EastWestWallShape")
 
 [node name="EastBoundary" type="StaticBody3D" parent="."]
-position = Vector3(20, 1.5, 0)
+position = Vector3(32, 1.5, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="EastBoundary"]
 shape = SubResource("EastWestWallShape")
 
 [node name="CrystalDestination" type="MeshInstance3D" parent="."]
-position = Vector3(12, 1.0, -9)
+position = Vector3(19, 1.0, -17)
 mesh = SubResource("CrystalMesh")
 
 [node name="CrystalLight" type="OmniLight3D" parent="CrystalDestination"]
@@ -133,6 +141,63 @@ omni_range = 5.0
 [node name="Bridge" parent="." instance=ExtResource("6_bridge")]
 position = Vector3(7, 0.25, -3)
 rotation_degrees = Vector3(0, 90, 0)
+
+[node name="BaseCamp" type="Node3D" parent="."]
+
+[node name="Tent" parent="BaseCamp" instance=ExtResource("7_tent")]
+position = Vector3(-3, 0.25, 8)
+rotation_degrees = Vector3(0, -25, 0)
+
+[node name="Campfire" parent="BaseCamp" instance=ExtResource("8_fire")]
+position = Vector3(2.5, 0.25, 8)
+
+[node name="FireLight" type="OmniLight3D" parent="BaseCamp/Campfire"]
+position = Vector3(0, 1.1, 0)
+light_color = Color(1, 0.46, 0.13, 1)
+light_energy = 1.8
+omni_range = 7.0
+
+[node name="CampSign" parent="BaseCamp" instance=ExtResource("9_sign")]
+position = Vector3(4, 0.25, 5.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="PathToClearing" type="Node3D" parent="."]
+
+[node name="Path01" parent="PathToClearing" instance=ExtResource("10_path")]
+position = Vector3(2, 0.02, 1)
+
+[node name="Path02" parent="PathToClearing" instance=ExtResource("10_path")]
+position = Vector3(4, 0.02, -2)
+
+[node name="Path03" parent="PathToClearing" instance=ExtResource("10_path")]
+position = Vector3(7, 0.02, -5)
+
+[node name="Path04" parent="PathToClearing" instance=ExtResource("10_path")]
+position = Vector3(10, 0.02, -8)
+
+[node name="Path05" parent="PathToClearing" instance=ExtResource("10_path")]
+position = Vector3(13, 0.02, -11)
+
+[node name="Path06" parent="PathToClearing" instance=ExtResource("10_path")]
+position = Vector3(16, 0.02, -14)
+
+[node name="AncientClearing" type="Node3D" parent="."]
+
+[node name="MonolithA" parent="AncientClearing" instance=ExtResource("14_stone")]
+position = Vector3(15, 0.25, -18)
+rotation_degrees = Vector3(0, 25, 0)
+
+[node name="MonolithB" parent="AncientClearing" instance=ExtResource("14_stone")]
+position = Vector3(23, 0.25, -18)
+rotation_degrees = Vector3(0, -35, 0)
+
+[node name="MonolithC" parent="AncientClearing" instance=ExtResource("14_stone")]
+position = Vector3(19, 0.25, -23)
+rotation_degrees = Vector3(0, 170, 0)
+
+[node name="ClearingSign" parent="AncientClearing" instance=ExtResource("9_sign")]
+position = Vector3(17, 0.25, -13)
+rotation_degrees = Vector3(0, 135, 0)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
@@ -197,6 +262,50 @@ position = Vector3(14, 0.25, -12)
 
 [node name="TreeG" parent="." instance=ExtResource("1_tree")]
 position = Vector3(-15, 0.25, -11)
+
+[node name="TreeH" parent="." instance=ExtResource("1_tree")]
+position = Vector3(-25, 0.25, -22)
+
+[node name="TreeI" parent="." instance=ExtResource("1_tree")]
+position = Vector3(27, 0.25, -24)
+
+[node name="TreeJ" parent="." instance=ExtResource("1_tree")]
+position = Vector3(-24, 0.25, 24)
+
+[node name="TreeK" parent="." instance=ExtResource("1_tree")]
+position = Vector3(25, 0.25, 22)
+
+[node name="GrassA" parent="." instance=ExtResource("11_grass")]
+position = Vector3(-8, 0.25, 1)
+
+[node name="GrassB" parent="." instance=ExtResource("11_grass")]
+position = Vector3(-14, 0.25, 5)
+rotation_degrees = Vector3(0, 55, 0)
+
+[node name="GrassC" parent="." instance=ExtResource("11_grass")]
+position = Vector3(11, 0.25, 6)
+rotation_degrees = Vector3(0, -30, 0)
+
+[node name="GrassD" parent="." instance=ExtResource("11_grass")]
+position = Vector3(23, 0.25, -7)
+
+[node name="GrassE" parent="." instance=ExtResource("11_grass")]
+position = Vector3(7, 0.25, -18)
+
+[node name="FlowerA" parent="." instance=ExtResource("12_flower")]
+position = Vector3(-5, 0.25, 2)
+
+[node name="FlowerB" parent="." instance=ExtResource("12_flower")]
+position = Vector3(8, 0.25, 5)
+
+[node name="FlowerC" parent="." instance=ExtResource("12_flower")]
+position = Vector3(16, 0.25, -8)
+
+[node name="MushroomsA" parent="." instance=ExtResource("13_mushroom")]
+position = Vector3(-10, 0.25, -9)
+
+[node name="MushroomsB" parent="." instance=ExtResource("13_mushroom")]
+position = Vector3(24, 0.25, -15)
 
 [node name="RockA" parent="." instance=ExtResource("3_rock")]
 position = Vector3(5, 0.25, 3)

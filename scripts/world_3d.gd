@@ -29,7 +29,7 @@ func _process(_delta: float) -> void:
 		crystal_collected = true
 		crystal.visible = false
 		prompt.text = "Crystal collected!"
-		objective.text = "Objective complete — explore the clearing"
+		objective.text = "Objective: return the crystal to the blue shrine"
 		interact_released = false
 	if not Input.is_key_pressed(KEY_E):
 		interact_released = true
